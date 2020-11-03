@@ -10,4 +10,73 @@ import UIKit
 
 class HourlyCollectionViewCell: UICollectionViewCell {
     
+    static let cellId = "HourlyCollectionViewCell"
+    
+    private let timeLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "HelveticaNeue", size: 14)
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let tempLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "HelveticaNeue", size: 15)
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.tintColor = .white
+        return imageView
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        backgroundColor = .clear
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
+
+// MARK: - Methods
+extension HourlyCollectionViewCell {
+    private func setupUI() {
+        contentView.addSubview(timeLabel)
+        contentView.addSubview(tempLabel)
+        contentView.addSubview(imageView)
+        
+        NSLayoutConstraint.activate([
+            timeLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            timeLabel.topAnchor.constraint(equalTo: contentView.topAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            tempLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            tempLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        ])
+    }
+    
+    func configurateWith(_ hourlyWeather: Current?, and index: Int) {
+        guard let temp = hourlyWeather?.tempToString else { return }
+        guard let imageString = hourlyWeather?.weather?.first?.systemIconNameString else { return }
+        
+        timeLabel.text = DateAssistant.shared.getTimeFromCurrentHourByIndex(index)
+        tempLabel.text = temp
+        imageView.image = UIImage(systemName: imageString)
+    }
+}
+

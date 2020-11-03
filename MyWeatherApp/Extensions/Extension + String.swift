@@ -7,3 +7,13 @@
 //
 
 import Foundation
+
+extension String {
+    func capitalizeFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
+    }
+
+    mutating func capitalizingFirstLetter() {
+        self = self.capitalizeFirstLetter()
+    }
+}

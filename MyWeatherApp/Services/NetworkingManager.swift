@@ -7,3 +7,25 @@
 //
 
 import Foundation
+import  Alamofire
+
+class NetworkingManager {
+    static let shared = NetworkingManager()
+    
+    private init() {}
+    
+    func fetchDataFrom(_ urlString: String, with completion: @escaping (Result) -> ()) {
+        AF.request(urlString)
+            .validate()
+            .responseDecodable(of: Result.self) { dataResponse in
+                switch dataResponse.result {
+                case .success(let value):
+                    DispatchQueue.main.async {
+                        completion(value)
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+        }
+    }
+}
