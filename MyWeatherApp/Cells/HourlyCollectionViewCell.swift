@@ -8,33 +8,15 @@
 
 import UIKit
 
-class HourlyCollectionViewCell: UICollectionViewCell {
+final class HourlyCollectionViewCell: UICollectionViewCell {
     
     static let cellId = "HourlyCollectionViewCell"
     
-    private let timeLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "HelveticaNeue", size: 14)
-        label.textColor = .white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    private let timeLabel = MyLabel(color: .white, textSize: 14)
+    private let tempLabel = MyLabel(color: .white, textSize: 15)
     
-    private let tempLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "HelveticaNeue", size: 15)
-        label.textColor = .white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.tintColor = .white
-        return imageView
-    }()
-    
+    private let imageView = MyImageView(color: .white)
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         

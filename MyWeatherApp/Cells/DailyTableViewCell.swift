@@ -8,54 +8,24 @@
 
 import UIKit
 
-class DailyTableViewCell: UITableViewCell {
+final class DailyTableViewCell: UITableViewCell {
     
     static let cellId = "DailyTableViewCell"
     
-    private let weekDayLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "HelveticaNeue", size: 16)
-        label.textColor = Constants.blackColor
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    private let weekDayLabel = MyLabel(color: Constants.shared.blackColor, textSize: 16)
+    private let dateLabel = MyLabel(color: Constants.shared.blackColor, textSize: 12)
     
-    private let dateLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "HelveticaNeue", size: 12)
-        label.textColor = Constants.grayColor
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    private let tempLabel = MyLabel(color: Constants.shared.blackColor,
+                                    alignment: .right,
+                                    textSize: 14)
+    private let nightTemp = MyLabel(color: Constants.shared.grayColor,
+                                    alignment: .right,
+                                    textSize: 13)
     
-    private let tempLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "HelveticaNeue", size: 14)
-        label.textColor = Constants.blackColor
-        label.textAlignment = .right
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let nightTemp: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "HelveticaNeue", size: 13)
-        label.textAlignment = .right
-        label.textColor = Constants.grayColor
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let weatherImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.tintColor = Constants.blueColor
-        return imageView
-    }()
+    private let weatherImage = MyImageView(color: Constants.shared.blueColor)
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         setupUI()
     }
     
@@ -75,26 +45,26 @@ extension DailyTableViewCell {
         
         NSLayoutConstraint.activate([
             weekDayLabel.topAnchor.constraint(equalTo: contentView.centerYAnchor),
-            weekDayLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.sideSpacing)
+            weekDayLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.shared.sideSpacing)
         ])
         
         NSLayoutConstraint.activate([
-            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.sideSpacing),
+            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.shared.sideSpacing),
             dateLabel.bottomAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            nightTemp.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.sideSpacing),
+            nightTemp.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.shared.sideSpacing),
             nightTemp.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            tempLabel.centerXAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.sideSpacing * 4),
+            tempLabel.centerXAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.shared.sideSpacing * 4),
             tempLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            weatherImage.centerXAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.sideSpacing * 7),
+            weatherImage.centerXAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.shared.sideSpacing * 7),
             weatherImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }

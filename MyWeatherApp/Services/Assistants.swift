@@ -11,27 +11,30 @@ import CoreLocation
 
 // Mark: - Constants
 struct Constants {
+    static let shared = Constants()
+    private init() {}
     
-    static let blueColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
-    static let blackColor = #colorLiteral(red: 0.03222160533, green: 0.03222160533, blue: 0.03222160533, alpha: 1)
-    static let grayColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
-    static let sideSpacing: CGFloat = 20
-    static let minSpacing: CGFloat = 10
-    static let sectionSpacing: CGFloat = 30
-    static let itemsCount: CGFloat = 6
-    static let screenWidth = UIScreen.main.bounds.width
-    static let screenHeight = UIScreen.main.bounds.height
-    static let apiKey = "b4f23272ba07f2c65355e28d88eb14ee"
+    let blueColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+    let blackColor = #colorLiteral(red: 0.03222160533, green: 0.03222160533, blue: 0.03222160533, alpha: 1)
+    let grayColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+    let sideSpacing: CGFloat = 20
+    let minSpacing: CGFloat = 10
+    let sectionSpacing: CGFloat = 30
+    let itemsCount: CGFloat = 6
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
+    let apiKey = "b4f23272ba07f2c65355e28d88eb14ee"
     
-    static var hourlyItemWidth: CGFloat {
+    var hourlyItemWidth: CGFloat {
         (screenWidth - (sideSpacing * (itemsCount + 1))) / itemsCount
     }
     
-    static var pushItemWidth: CGFloat {
-        Constants.screenWidth - (Constants.sideSpacing * 2)
+    var pushItemWidth: CGFloat {
+        Constants.shared
+            .screenWidth - (Constants.shared.sideSpacing * 2)
     }
     
-    static func getUrlStringFrom(_ latitude: Double, and longitude: Double) -> String {
+    func getUrlStringFrom(_ latitude: Double, and longitude: Double) -> String {
         "https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&exclude=minutely&appid=\(apiKey)&units=metric"
     }
 }
@@ -39,7 +42,6 @@ struct Constants {
 // MARK: - Coordinate assistants
 struct CoordinateAssistant {
     static let shared = CoordinateAssistant()
-    
     private init(){}
     
     func getCoordinateFrom(_ city: String, with completion: @escaping (_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> ()) {
@@ -52,7 +54,6 @@ struct CoordinateAssistant {
 // MARK: - Weather assistants
 struct WeatherAssistant {
     static let shared = WeatherAssistant()
-    
     private init(){}
     
     func getStringFromTemp(_ temp: Double?) -> String {
@@ -107,7 +108,6 @@ struct WeatherAssistant {
 // MARK: - Date assistants
 struct DateAssistant {
     static let shared = DateAssistant()
-    
     private init() {}
     
     func getDayAndMonthByIndex(_ index: Int) -> String {

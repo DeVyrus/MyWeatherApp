@@ -8,27 +8,15 @@
 
 import UIKit
 
-class PushCollectionViewCell: UICollectionViewCell {
+final class PushCollectionViewCell: UICollectionViewCell {
     
     static let cellId = "PushCollectionViewCell"
     
-    let textLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "HelveticaNeue", size: 16)
-        label.textColor = Constants.blackColor
-        label.numberOfLines = 3
-        label.textAlignment = .left
-        return label
-    }()
+    private let textLabel = MyLabel(color: Constants.shared.blackColor,
+                                    alignment: .left,
+                                    textSize: 16)
     
-    let warningImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        return imageView
-    }()
+    private let warningImageView = MyImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -68,15 +56,15 @@ extension PushCollectionViewCell {
         contentView.addSubview(warningImageView)
         
         NSLayoutConstraint.activate(
-            [warningImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.sideSpacing),
+            [warningImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.shared.sideSpacing),
              warningImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
              warningImageView.widthAnchor.constraint(equalToConstant: 50),
              warningImageView.heightAnchor.constraint(equalToConstant: 50)
         ])
         
         NSLayoutConstraint.activate(
-            [textLabel.leadingAnchor.constraint(equalTo: warningImageView.trailingAnchor, constant: Constants.minSpacing),
-             textLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.sideSpacing),
+            [textLabel.leadingAnchor.constraint(equalTo: warningImageView.trailingAnchor, constant: Constants.shared.minSpacing),
+             textLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.shared.sideSpacing),
              textLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }

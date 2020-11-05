@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class MainWeatherViewController: UIViewController {
+final class MainWeatherViewController: UIViewController {
     
     private var result: Result?
     
@@ -23,14 +23,14 @@ class MainWeatherViewController: UIViewController {
     
     lazy var hourlyWeatherCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 0, left: Constants.sideSpacing,
-                                           bottom: 0, right: Constants.sideSpacing)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: Constants.shared.sideSpacing,
+                                           bottom: 0, right: Constants.shared.sideSpacing)
         
         layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = Constants.sideSpacing
+        layout.minimumLineSpacing = Constants.shared.sideSpacing
         
-        layout.itemSize = CGSize(width: Constants.hourlyItemWidth,
-                                 height: Constants.hourlyItemWidth * 2)
+        layout.itemSize = CGSize(width: Constants.shared.hourlyItemWidth,
+                                 height: Constants.shared.hourlyItemWidth * 2)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -46,12 +46,12 @@ class MainWeatherViewController: UIViewController {
     lazy var pushCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.sectionInset = UIEdgeInsets(top: 0, left: Constants.sideSpacing,
-                                           bottom: 0, right: Constants.sideSpacing)
-        layout.itemSize = CGSize(width: Constants.pushItemWidth,
-                                 height: Constants.pushItemWidth / 4)
-        layout.minimumLineSpacing = Constants.minSpacing
-        
+        layout.sectionInset = UIEdgeInsets(top: 0, left: Constants.shared.sideSpacing,
+                                           bottom: 0, right: Constants.shared.sideSpacing)
+        layout.itemSize = CGSize(width: Constants.shared.pushItemWidth,
+                                 height: Constants.shared.pushItemWidth / 4)
+        layout.minimumLineSpacing = Constants.shared.minSpacing
+
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(PushCollectionViewCell.self,
@@ -74,34 +74,13 @@ class MainWeatherViewController: UIViewController {
         return tableView
     }()
     
-    private let tempLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "HelveticaNeue", size: 50)
-        label.textColor = .white
-        label.textAlignment = .right
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let feelsLikeTemp: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "HelveticaNeue", size: 16)
-        label.textColor = .white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let weatherImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
-        imageView.tintColor = .white
-        return imageView
-    }()
+    private let tempLabel = MyLabel(color: .white, alignment: .right, textSize: 50)
+    private let feelsLikeTemp = MyLabel(color: .white, textSize: 16)
+    private let weatherImage = MyImageView(color: .white)
     
     private let backgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = Constants.blueColor
+        view.backgroundColor = Constants.shared.blueColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -149,7 +128,7 @@ extension MainWeatherViewController {
             
             CoordinateAssistant.shared.getCoordinateFrom(cityName) { (coordinate, error) in
                 guard let coord = coordinate else { return }
-                let url = Constants.getUrlStringFrom(coord.latitude, and: coord.longitude)
+                let url = Constants.shared.getUrlStringFrom(coord.latitude, and: coord.longitude)
                 completion(url)
             }
         }
@@ -177,6 +156,9 @@ extension MainWeatherViewController {
         view.addSubview(hourlyWeatherCollectionView)
         view.addSubview(dailyWeatherTableView)
         
+        pushCollectionView.delegate = self
+        pushCollectionView.dataSource = self
+        
         view.addSubview(tempLabel)
         view.addSubview(feelsLikeTemp)
         view.addSubview(weatherImage)
@@ -184,22 +166,22 @@ extension MainWeatherViewController {
         NSLayoutConstraint.activate([
             backgroundView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundView.widthAnchor.constraint(equalToConstant: Constants.screenWidth),
-            backgroundView.heightAnchor.constraint(equalToConstant: Constants.screenHeight * 0.6)
+            backgroundView.widthAnchor.constraint(equalToConstant: Constants.shared.screenWidth),
+            backgroundView.heightAnchor.constraint(equalToConstant: Constants.shared.screenHeight * 0.6)
         ])
         
         NSLayoutConstraint.activate([
             pushCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             pushCollectionView.centerYAnchor.constraint(equalTo: backgroundView.bottomAnchor),
-            pushCollectionView.widthAnchor.constraint(equalToConstant: Constants.screenWidth),
-            pushCollectionView.heightAnchor.constraint(equalToConstant: Constants.screenWidth * 0.3)
+            pushCollectionView.widthAnchor.constraint(equalToConstant: Constants.shared.screenWidth),
+            pushCollectionView.heightAnchor.constraint(equalToConstant: Constants.shared.screenWidth * 0.3)
         ])
         
         NSLayoutConstraint.activate([
             hourlyWeatherCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             hourlyWeatherCollectionView.bottomAnchor.constraint(equalTo: pushCollectionView.topAnchor),
-            hourlyWeatherCollectionView.widthAnchor.constraint(equalToConstant: Constants.screenWidth),
-            hourlyWeatherCollectionView.heightAnchor.constraint(equalToConstant: Constants.screenWidth * 0.3)
+            hourlyWeatherCollectionView.widthAnchor.constraint(equalToConstant: Constants.shared.screenWidth),
+            hourlyWeatherCollectionView.heightAnchor.constraint(equalToConstant: Constants.shared.screenWidth * 0.3)
         ])
         
         NSLayoutConstraint.activate([
@@ -210,12 +192,12 @@ extension MainWeatherViewController {
         ])
         
         NSLayoutConstraint.activate([
-            tempLabel.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -Constants.minSpacing / 2),
-            tempLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: Constants.screenHeight * 0.2)
+            tempLabel.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -Constants.shared.minSpacing / 2),
+            tempLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: Constants.shared.screenHeight * 0.2)
         ])
         
         NSLayoutConstraint.activate([
-            weatherImage.leadingAnchor.constraint(equalTo: view.centerXAnchor, constant: Constants.minSpacing / 2),
+            weatherImage.leadingAnchor.constraint(equalTo: view.centerXAnchor, constant: Constants.shared.minSpacing / 2),
             weatherImage.centerYAnchor.constraint(equalTo: tempLabel.centerYAnchor),
             weatherImage.widthAnchor.constraint(equalToConstant: 65),
             weatherImage.heightAnchor.constraint(equalToConstant: 65)
@@ -223,7 +205,7 @@ extension MainWeatherViewController {
         
         NSLayoutConstraint.activate([
             feelsLikeTemp.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            feelsLikeTemp.topAnchor.constraint(equalTo: tempLabel.bottomAnchor, constant: Constants.minSpacing)
+            feelsLikeTemp.topAnchor.constraint(equalTo: tempLabel.bottomAnchor, constant: Constants.shared.minSpacing)
         ])
     }
     
@@ -235,7 +217,7 @@ extension MainWeatherViewController {
         navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         
-        navBarAppearance.backgroundColor = Constants.blueColor
+        navBarAppearance.backgroundColor = Constants.shared.blueColor
         
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
@@ -331,7 +313,7 @@ extension MainWeatherViewController: CLLocationManagerDelegate {
         let longitude = location.coordinate.longitude
         
         DispatchQueue.global().async {
-            let urlString = Constants.getUrlStringFrom(latitude, and: longitude)
+            let urlString = Constants.shared.getUrlStringFrom(latitude, and: longitude)
             
             DispatchQueue.main.async {
                 NetworkingManager.shared.fetchDataFrom(urlString) { [weak self] result in
