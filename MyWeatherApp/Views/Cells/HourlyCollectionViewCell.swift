@@ -10,6 +10,8 @@ import UIKit
 
 final class HourlyCollectionViewCell: UICollectionViewCell {
     
+//    MARK: - Properties
+    
     static let cellId = "HourlyCollectionViewCell"
     
     private let timeLabel = MyLabel(color: .white, textSize: 14)
@@ -30,7 +32,17 @@ final class HourlyCollectionViewCell: UICollectionViewCell {
 }
 
 // MARK: - Methods
+
 extension HourlyCollectionViewCell {
+    func configurateWith(_ hourlyWeather: Current?, and index: Int) {
+        guard let temp = hourlyWeather?.tempToString else { return }
+        guard let imageString = hourlyWeather?.weather?.first?.systemIconNameString else { return }
+        
+        timeLabel.text = DateAssistant.shared.getTimeFromCurrentHourByIndex(index)
+        tempLabel.text = temp
+        imageView.image = UIImage(systemName: imageString)
+    }
+    
     private func setupUI() {
         contentView.addSubview(timeLabel)
         contentView.addSubview(tempLabel)
@@ -50,15 +62,6 @@ extension HourlyCollectionViewCell {
             imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
-    }
-    
-    func configurateWith(_ hourlyWeather: Current?, and index: Int) {
-        guard let temp = hourlyWeather?.tempToString else { return }
-        guard let imageString = hourlyWeather?.weather?.first?.systemIconNameString else { return }
-        
-        timeLabel.text = DateAssistant.shared.getTimeFromCurrentHourByIndex(index)
-        tempLabel.text = temp
-        imageView.image = UIImage(systemName: imageString)
     }
 }
 

@@ -10,6 +10,8 @@ import UIKit
 
 final class DailyTableViewCell: UITableViewCell {
     
+//    MARK: - Properties
+    
     static let cellId = "DailyTableViewCell"
     
     private let weekDayLabel = MyLabel(color: Constants.shared.blackColor, textSize: 16)
@@ -35,7 +37,22 @@ final class DailyTableViewCell: UITableViewCell {
 }
 
 // MARK: - Methods
+
 extension DailyTableViewCell {
+    
+    func configurateWith(_ dailyWeather: Daily?, and index: Int) {
+        dateLabel.text = DateAssistant.shared.getDayAndMonthByIndex(index)
+        weekDayLabel.text = DateAssistant.shared.getWeekDayByIndex(index)
+        
+        guard let imageString = dailyWeather?.weather?.first?.systemIconNameString else { return }
+        guard let dayTemp = dailyWeather?.temp?.dayToString else { return }
+        guard let nightTemperature = dailyWeather?.temp?.nightToString else { return }
+        
+        tempLabel.text = dayTemp
+        nightTemp.text = nightTemperature
+        weatherImage.image = UIImage(systemName: imageString)
+    }
+    
     private func setupUI() {
         contentView.addSubview(weekDayLabel)
         contentView.addSubview(dateLabel)
@@ -67,19 +84,6 @@ extension DailyTableViewCell {
             weatherImage.centerXAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.shared.sideSpacing * 7),
             weatherImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
-    }
-    
-    func configurateWith(_ dailyWeather: Daily?, and index: Int) {
-        dateLabel.text = DateAssistant.shared.getDayAndMonthByIndex(index)
-        weekDayLabel.text = DateAssistant.shared.getWeekDayByIndex(index)
-        
-        guard let imageString = dailyWeather?.weather?.first?.systemIconNameString else { return }
-        guard let dayTemp = dailyWeather?.temp?.dayToString else { return }
-        guard let nightTemperature = dailyWeather?.temp?.nightToString else { return }
-        
-        tempLabel.text = dayTemp
-        nightTemp.text = nightTemperature
-        weatherImage.image = UIImage(systemName: imageString)
     }
 }
 

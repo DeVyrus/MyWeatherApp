@@ -34,7 +34,7 @@ final class MyLabel: UILabel {
         text = labelText
         textColor = color
         translatesAutoresizingMaskIntoConstraints = false
-        numberOfLines = 0
+        numberOfLines = 2
     }
 }
 

@@ -10,17 +10,18 @@ import UIKit
 
 final class PushCollectionViewCell: UICollectionViewCell {
     
+//    MARK: - Properties
+    
     static let cellId = "PushCollectionViewCell"
     
     private let textLabel = MyLabel(color: Constants.shared.blackColor,
                                     alignment: .left,
-                                    textSize: 16)
+                                    textSize: 14)
     
     private let warningImageView = MyImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         backgroundColor = .white
         setupUI()
     }
@@ -31,26 +32,27 @@ final class PushCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         layer.cornerRadius = 10
-        
         layer.shadowRadius = 3
         layer.shadowOffset = CGSize(width: 2, height: 3)
         layer.shadowOpacity = 0.2
     }
+}
+
+// MARK: - Methods
+
+extension PushCollectionViewCell {
     
-    func updateInterfaceWith(_ index: Int) {
+    func updateUIWith(_ index: Int) {
         switch index {
         case 0:
-            textLabel.text = "В ближайший час ожидается дождь."
+            textLabel.text = "Не промокните. В ближайший час ожидается дождь."
             warningImageView.image = UIImage(named: "water 10.29.01")
         default:
             textLabel.text = "Ожидается усиление ветра до 20 м/c."
             warningImageView.image = UIImage(named: "warning 10.28.58")
         }
     }
-}
-
-// MARK: - Methods
-extension PushCollectionViewCell {
+    
     private func setupUI() {
         contentView.addSubview(textLabel)
         contentView.addSubview(warningImageView)

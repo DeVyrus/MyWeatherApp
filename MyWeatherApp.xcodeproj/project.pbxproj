@@ -71,6 +71,7 @@
 			children = (
 				607ECF442554571E003EAB36 /* MyLabel.swift */,
 				607ECF4925547150003EAB36 /* MyImageView.swift */,
+				608BEAC225517ABC0015FE4B /* Cells */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -98,7 +99,6 @@
 			children = (
 				607ECF46255468A0003EAB36 /* Views */,
 				608BEABB25517A5D0015FE4B /* Controllers */,
-				608BEAC225517ABC0015FE4B /* Cells */,
 				608BEACA25517B420015FE4B /* Services */,
 				608BEAC525517B150015FE4B /* Models */,
 				608BEACD25517B780015FE4B /* Extensions */,

@@ -10,6 +10,8 @@ import UIKit
 import CoreLocation
 
 final class MainWeatherViewController: UIViewController {
+
+//    MARK: - Properties
     
     private var result: Result?
     
@@ -99,9 +101,10 @@ final class MainWeatherViewController: UIViewController {
 }
 
 // MARK: - Private methods
+
 extension MainWeatherViewController {
     
-    private func updateInterfaceWith(_ result: Result?) {
+    private func updateUIWith(_ result: Result?) {
         
         guard let temp = result?.current?.tempToString else { return }
         guard let feelsLike = result?.current?.feelsLikeToString else { return }
@@ -141,11 +144,9 @@ extension MainWeatherViewController {
     
     @objc private func findCityWeather() {
         presentSearchAlertController(withTitle: "Введите название города", message: nil, style: .alert) { url in
-            DispatchQueue.main.async {
-                NetworkingManager.shared.fetchDataFrom(url) { [weak self] result in
-                    self?.result = result
-                    self?.updateInterfaceWith(result)
-                }
+            NetworkingManager.shared.fetchDataFrom(url) { [weak self] result in
+                self?.result = result
+                self?.updateUIWith(result)
             }
         }
     }
@@ -238,6 +239,7 @@ extension MainWeatherViewController {
 }
 
 // MARK: - UICollectionViewDelegate & UICollectionViewDataSource
+
 extension MainWeatherViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -252,7 +254,7 @@ extension MainWeatherViewController: UICollectionViewDelegate, UICollectionViewD
         if collectionView == pushCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PushCollectionViewCell.cellId, for: indexPath) as! PushCollectionViewCell
             
-            cell.updateInterfaceWith(indexPath.item)
+            cell.updateUIWith(indexPath.item)
             
             return cell
         } else {
@@ -264,16 +266,10 @@ extension MainWeatherViewController: UICollectionViewDelegate, UICollectionViewD
             return cell
         }
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        if collectionView == pushCollectionView {
-            
-        }
-    }
 }
 
 // MARK: - UITableViewDelegate & UITableViewDataSource
+
 extension MainWeatherViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -293,7 +289,6 @@ extension MainWeatherViewController: UITableViewDelegate, UITableViewDataSource 
         
         let detailsVC = WeatherDetailsViewController()
         let dailyWeather = result?.daily?[indexPath.row]
-        
         detailsVC.dailyWeather = dailyWeather
             
         navigationController?.pushViewController(detailsVC, animated: true)
@@ -306,6 +301,7 @@ extension MainWeatherViewController: UITableViewDelegate, UITableViewDataSource 
 }
 
 // MARK: - CLLocationManagerDelegate
+
 extension MainWeatherViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location  = locations.last else { return }
@@ -314,12 +310,9 @@ extension MainWeatherViewController: CLLocationManagerDelegate {
         
         DispatchQueue.global().async {
             let urlString = Constants.shared.getUrlStringFrom(latitude, and: longitude)
-            
-            DispatchQueue.main.async {
-                NetworkingManager.shared.fetchDataFrom(urlString) { [weak self] result in
-                    self?.result = result
-                    self?.updateInterfaceWith(result)
-                }
+            NetworkingManager.shared.fetchDataFrom(urlString) { [weak self] result in
+                self?.result = result
+                self?.updateUIWith(result)
             }
         }
     }

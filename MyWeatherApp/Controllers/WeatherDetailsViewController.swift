@@ -10,6 +10,8 @@ import UIKit
 
 final class WeatherDetailsViewController: UIViewController {
     
+//    MARK: - Properties
+    
     var dailyWeather: Daily?
     
     private let dayLabel = MyLabel(labelText: "Днем", color: Constants.shared.blueColor)
@@ -32,7 +34,7 @@ final class WeatherDetailsViewController: UIViewController {
     
     private let feelsLikeLabel = MyLabel(labelText: "Ощущается как",
                                          color: Constants.shared.grayColor,
-                                         textSize: 12)
+                                         textSize: 13)
     
     private let dayFeelsLikeTempLabel = MyLabel(color: Constants.shared.grayColor,
                                        alignment: .right,
@@ -75,14 +77,15 @@ final class WeatherDetailsViewController: UIViewController {
         view.backgroundColor = .white
         
         setupUI()
-        updateInterface()
+        updateUI()
     }
 }
 
 // MARK: - Private methods
+
 extension WeatherDetailsViewController {
     
-    private func updateInterface() {
+    private func updateUI() {
         
         guard let weather = dailyWeather else { return }
         
